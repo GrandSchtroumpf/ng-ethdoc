@@ -13,6 +13,9 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "paths": {
+      "@devdoc/shared": ["./src/app/shared"]
+    },
     "lib": [
       "es2017",
       "dom"

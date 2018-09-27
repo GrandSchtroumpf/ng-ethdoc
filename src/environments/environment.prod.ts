@@ -1,3 +1,11 @@
 export const environment = {
-  production: true
+  production: true,
+  firebase: {
+    apiKey: 'AIzaSyCxoPpl2ebe9NK0Epb4UpJ1J3qfddcrzPU',
+    authDomain: 'eth-devdoc.firebaseapp.com',
+    databaseURL: 'https://eth-devdoc.firebaseio.com',
+    projectId: 'eth-devdoc',
+    storageBucket: 'eth-devdoc.appspot.com',
+    messagingSenderId: '912038954718'
+  }
 };
