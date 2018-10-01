@@ -17,6 +17,7 @@
     "@angular/compiler": "^6.1.0",
     "@angular/core": "^6.1.0",
     "@angular/fire": "^5.0.2",
+    "@angular/flex-layout": "^6.0.0-beta.18",
     "@angular/forms": "^6.1.0",
     "@angular/http": "^6.1.0",
     "@angular/material": "^6.4.7",
@@ -26,6 +27,8 @@
     "core-js": "^2.5.4",
     "firebase": "^5.5.1",
     "hammerjs": "^2.0.8",
+    "monaco-editor": "^0.14.3",
+    "ngx-monaco": "^0.8.0",
     "rxjs": "~6.2.0",
     "solc": "^0.4.25",
     "zone.js": "~0.8.26"

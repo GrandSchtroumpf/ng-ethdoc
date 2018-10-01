@@ -1,9 +1,13 @@
-<mat-sidenav-container>
-  <mat-sidenav>
-
+<mat-sidenav-container *ngIf="contract$ | async as contract">
+  <mat-sidenav #sidebar opened="true" mode="side">
+    <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+      <h1>Title</h1>
+      <mat-icon routerLink="../edit">edit</mat-icon>
+    </mat-toolbar>
   </mat-sidenav>
 
   <mat-sidenav-content>
-
+    <mat-icon class="menu" (click)="sidebar.toggle()">menu</mat-icon>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

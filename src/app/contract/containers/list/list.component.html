@@ -1,5 +1,12 @@
 <ul>
-  <li *ngFor="let contract of contracts$ | async">
-    {{ contract.author }}
+  <li [routerLink]="['/contract/'+contract.name+'/view']" *ngFor="let contract of contracts$ | async">
+    {{ contract.name }}
+  </li>
+  <li *ngIf="newContract">
+    <mat-form-field>
+      <input #name (keydown.enter)="save(name.value)" (blur)="save(name.value)" matInput placeholder="Contract name" />
+    </mat-form-field>
   </li>
 </ul>
+
+<button mat-raised-button (click)="newContract = true">Create new Contract</button>

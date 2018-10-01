@@ -27,6 +27,8 @@ export interface Contract {
 }
 
 export interface ContractDoc {
+  name: string;
+  code: string;
   title: string;
   author: string;
   methods: {

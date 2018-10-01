@@ -1,5 +1,16 @@
-<h1>Add your code : </h1>
-<textarea #solidity>
+<section *ngIf="contract$ | async as contract" fxLayout="column" fxLayoutAlign="space-around center">
+  <mat-form-field>
+    <input matInput [value]="contract.name" placeholder="Contract name" />
+  </mat-form-field>
 
-</textarea>
-<button mat-raised-button (click)="compile(solidity.value)">Compile</button>
+  <monaco-editor
+    #editor
+    class="mat-elevation-z10"
+    theme="vs-dark"
+    [file]="file"
+    (fileChange)="code = $event.content"
+    (keydown.control.s)="save($event, contract)">
+  </monaco-editor>
+
+  <button mat-raised-button routerLink="../view">Compile</button>
+</section>

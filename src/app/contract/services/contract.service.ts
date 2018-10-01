@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Contract, ContractDoc } from './../models/contract';
 
 @Injectable({
@@ -8,13 +8,21 @@ import { Contract, ContractDoc } from './../models/contract';
 })
 export class ContractService {
 
-  public contracts$: Observable<ContractDoc[]>;
+  private collection: AngularFirestoreCollection<ContractDoc>;
+  public contracts = new BehaviorSubject<ContractDoc[]>(null);
+  public contracts$ = this.contracts.asObservable();
 
   constructor(private db: AngularFirestore) {
-    this.contracts$ = this.db.collection<ContractDoc>('contracts').valueChanges();
+    this.collection = this.db.collection<ContractDoc>('contracts');
+    this.collection.valueChanges()
+      .subscribe(contracts => this.contracts.next(contracts));
   }
 
-  public add(doc: ContractDoc) {
-    this.db.collection('contracts').add(doc);
+  public add(doc: Partial<ContractDoc>) {
+    return this.collection.doc<ContractDoc>(doc.name).set(doc as ContractDoc);
+  }
+
+  public update(doc: Partial<ContractDoc>) {
+    return this.collection.doc<ContractDoc>(doc.title).update(doc);
   }
 }

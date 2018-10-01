@@ -26,22 +26,51 @@ export class Compiler {
   // TODO : Add more data about the doc (from ABI)
 
   public getDoc(contract: Contract): ContractDoc {
-    const getValueFromSubKey = (collection: Object, subKey: string): Object => {
-      for (const key in collection) {
-        if (key.includes(subKey)) { return collection[key]; }
-      }
-      return;
+
+    /** Get params from a methods, combining abi and devdoc */
+    const getParams = (inputs, params) => {
+      return inputs.reduce((all, {name, type}) => {
+        const description = params[name] || null;
+        const param = { type, description };
+        return { ...all, [name]: param };
+      }, {});
     };
-    const metadata = JSON.parse(contract.metadata);
-    console.log('metadata', metadata);
-    const abi = metadata.output.abi;
-    const methods = abi.reduce((acc: Object, def) => {
-      const methodDoc = {
-        ...getValueFromSubKey(metadata.output.devdoc.methods, def.name),
-        ...getValueFromSubKey(metadata.output.userdoc.methods, def.name)
+    /** Get return value of a methods, combining abi and devdoc */
+    const getReturns = (outputs, description) => {
+      return outputs.reduce((all, { name, type }) => {
+        return { ...all, [name || 'anonymous']: { type, description }};
+      }, {});
+    };
+    /** Get all documentation data for one method */
+    const getDocForMethod = ({name, inputs, outputs}, devdoc) => {
+      console.log({devdoc});
+      return {
+        [name]: {
+          ...devdoc,
+          params: getParams(inputs, devdoc.params),
+          return: getReturns(outputs, devdoc.return)
+        }
       };
-      return { ...acc, [def.name] :  methodDoc };
+    };
+
+    const metadata = JSON.parse(contract.metadata);
+    const abi = metadata.output.abi;
+    /** Get doc from all methods */
+    const methods = abi.reduce((acc: Object, def) => {
+
+     // Get the method: need to use includes because method looks like that : "methodName(type param)" and not "methodName"
+      for (const key in metadata.output.devdoc.methods) {
+        if (key.includes(def.name)) {
+          const methodDoc = {
+            ...metadata.output.devdoc.methods[key],
+            ...metadata.output.userdoc.methods[key]
+          };
+          return { ...acc, ...getDocForMethod(def, methodDoc) };
+        }
+      }
+      return acc; // if no doc provided for this method
     }, {});
+
     return { ...metadata.output.devdoc, methods };
 
   }

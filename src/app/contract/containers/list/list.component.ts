@@ -11,6 +11,7 @@ import { ContractDoc } from './../../models/contract';
 export class ListComponent implements OnInit {
 
   public contracts$: Observable<ContractDoc[]>;
+  public newContract: boolean;
 
   constructor(private service: ContractService) { }
 
@@ -18,4 +19,11 @@ export class ListComponent implements OnInit {
     this.contracts$ = this.service.contracts$;
   }
 
+  public save(name: string) {
+    this.newContract = false;
+    if (!name || name.length === 0) { return; }
+    this.service.add({name})
+      .then(() => console.log('success'))
+      .catch((err) => console.error(err));
+  }
 }

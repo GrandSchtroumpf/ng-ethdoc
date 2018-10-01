@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { MaterialModule } from '@devdoc/shared';
+import { MonacoEditorModule } from 'ngx-monaco';
 
 
 import { ViewComponent } from './containers/view/view.component';
@@ -14,6 +15,7 @@ import { EditComponent } from './containers/edit/edit.component';
     CommonModule,
     MaterialModule,
     ContractRouterModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [ViewComponent, ListComponent, EditComponent]
 })

@@ -1,0 +1,14 @@
+section {
+  height: 100%;
+}
+mat-form-field {
+  width: 80%;
+}
+
+input {
+  font-size: 1.5rem;
+}
+
+mat-icon {
+  cursor: pointer;
+}
