@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Remix } from '../../services/remix.service';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RootComponent implements OnInit {
 
-  constructor() { }
+  constructor(private remix: Remix) { }
+
+  @HostListener('window:message', ['$event'])
+  onMessage(e: MessageEvent) {
+    this.remix.getMsg(e);
+  }
 
   ngOnInit() {
 

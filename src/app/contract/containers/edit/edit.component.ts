@@ -7,6 +7,7 @@ import { ContractDoc } from './../../models/contract';
 import { Compiler } from './../../services/compiler.service';
 import { ContractService } from './../../services/contract.service';
 import { MonacoFile } from 'ngx-monaco';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class EditComponent implements OnInit {
   constructor(
     private compiler: Compiler,
     private service: ContractService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) { }
 
 
@@ -39,16 +41,21 @@ export class EditComponent implements OnInit {
     this.file = { uri: `${name}.sol`, language: 'sol', content: this.code };
   }
 
-  private compile(code: string) {
-    const compiled = this.compiler.compileOne(code);
+  private async compile(code: string) {
+    const compiled = await this.compiler.compileOne(code);
     const contractName = Object.keys(compiled.contracts)[0];
     return this.compiler.getDoc(compiled.contracts[contractName]);
   }
 
   public save(event: KeyboardEvent, contract: ContractDoc) {
     event.preventDefault();
-    const doc = this.compile(this.code);
-    this.service.add({...contract, ...doc, code: this.code});
+    this.compile(this.code)
+      .then(doc => this.service.update({...contract, ...doc, code: this.code}))
+      .then(() => this.snackBar.open('Saved', 'close', {duration: 2000}))
+      .catch(err => {
+        this.snackBar.open('Cannot compile or save', 'close', {duration: 2000});
+        console.error('Cannot compile', err);
+      });
   }
 
 }

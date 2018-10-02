@@ -14,7 +14,9 @@
       "node_modules/@types"
     ],
     "paths": {
-      "@devdoc/shared": ["./src/app/shared"]
+      "@devdoc/shared": ["./src/app/shared"],
+      "@devdoc/core": ["./src/app/core"],
+      "@devdoc/contract": ["./src/app/contract"],
     },
     "lib": [
       "es2017",

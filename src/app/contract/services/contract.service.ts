@@ -23,6 +23,6 @@ export class ContractService {
   }
 
   public update(doc: Partial<ContractDoc>) {
-    return this.collection.doc<ContractDoc>(doc.title).update(doc);
+    return this.collection.doc<ContractDoc>(doc.name).update(doc);
   }
 }

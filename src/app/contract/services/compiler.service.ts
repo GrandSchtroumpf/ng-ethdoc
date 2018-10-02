@@ -14,64 +14,43 @@ export class Compiler {
     this.solc = wrapper(window['Module']);
   }
 
-  private compile(sources) {
-    console.log(sources['Test.sol']);
-    return this.solc.compile(sources['Test.sol'], 1);
+  /** Get all documentation data for one method */
+  private getDocForMethod({ inputs, outputs }, devdoc) {
+    return {
+      ...devdoc,
+      params:  inputs.map(({name, type}) => ({ name, type, description: devdoc.params[name] || '' })),
+      return: { outputs, description: devdoc.return || '' }
+    };
   }
 
   public compileOne(code: string): Compiled {
     return this.solc.compile(code, 1);
   }
 
-  // TODO : Add more data about the doc (from ABI)
 
-  public getDoc(contract: Contract): ContractDoc {
-
-    /** Get params from a methods, combining abi and devdoc */
-    const getParams = (inputs, params) => {
-      return inputs.reduce((all, {name, type}) => {
-        const description = params[name] || null;
-        const param = { type, description };
-        return { ...all, [name]: param };
-      }, {});
-    };
-    /** Get return value of a methods, combining abi and devdoc */
-    const getReturns = (outputs, description) => {
-      return outputs.reduce((all, { name, type }) => {
-        return { ...all, [name || 'anonymous']: { type, description }};
-      }, {});
-    };
-    /** Get all documentation data for one method */
-    const getDocForMethod = ({name, inputs, outputs}, devdoc) => {
-      console.log({devdoc});
-      return {
-        [name]: {
-          ...devdoc,
-          params: getParams(inputs, devdoc.params),
-          return: getReturns(outputs, devdoc.return)
-        }
-      };
-    };
-
+  /**
+   * Get the Documentation of a contract
+   * @param contract The compiled contract to get the documentation from
+   */
+  public getDoc(contract: Contract): Partial<ContractDoc> {
     const metadata = JSON.parse(contract.metadata);
     const abi = metadata.output.abi;
-    /** Get doc from all methods */
-    const methods = abi.reduce((acc: Object, def) => {
-
-     // Get the method: need to use includes because method looks like that : "methodName(type param)" and not "methodName"
+    // Get doc from all methods
+    const methods = abi.map(def => {
+      const {name, payable, type, constant, stateMutability } = def;
+      let methodDoc = {};
+      // Get the method: need to use includes because method looks like that : "methodName(type param)" and not "methodName"
       for (const key in metadata.output.devdoc.methods) {
-        if (key.includes(def.name)) {
-          const methodDoc = {
+        if (key.includes(name)) {
+          methodDoc = {
             ...metadata.output.devdoc.methods[key],
             ...metadata.output.userdoc.methods[key]
           };
-          return { ...acc, ...getDocForMethod(def, methodDoc) };
         }
       }
-      return acc; // if no doc provided for this method
-    }, {});
-
-    return { ...metadata.output.devdoc, methods };
-
+      return { name, payable, type, constant, stateMutability, ...this.getDocForMethod(def, methodDoc) };
+    });
+    const { title, author } = metadata.output.devdoc;
+    return {title, author, methods};
   }
 }

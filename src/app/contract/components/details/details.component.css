@@ -1,0 +1,16 @@
+:host, mat-sidenav-container, mat-sidenav, mat-sidenav-content {
+  display: block;
+  height: 100%;
+}
+
+mat-sidenav {
+  width: 200px;
+}
+
+mat-toolbar-row {
+  text-transform: uppercase;
+}
+
+mat-card {
+  margin: 15px;
+}

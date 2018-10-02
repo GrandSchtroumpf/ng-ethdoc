@@ -1,3 +1,42 @@
+export interface ContractDoc {
+  name: string;
+  code: string;
+  owner: string;
+  title: string;
+  author: string;
+  methods: {
+    [method: string]: MethodDoc;
+  };
+}
+
+export interface MethodDoc {
+  name: string;
+  author: string;
+  details: string;
+  notice: string;
+  constant: boolean;
+  payable: boolean;
+  stateMutability: 'pure' | 'payable';
+  type: 'function' | 'constructor';
+  params: {
+      name: string;
+      type: string;
+      description: string;
+      // Only for memory usage
+      value?: any;
+  }[];
+  return: {
+    description,
+    outputs: {
+      name: string,
+      type: string,
+      // Only for memory usage
+      value?: any;
+    }[];
+  };
+
+}
+
 export interface Compiled {
   contracts: {
     [name: string]: Contract;
@@ -7,7 +46,6 @@ export interface Compiled {
     [name: string]: SolidityAST
   };
 }
-
 
 export interface Contract {
   assembly: {
@@ -24,26 +62,6 @@ export interface Contract {
   interface: string;
   metadata: string;
   opecode: string;
-}
-
-export interface ContractDoc {
-  name: string;
-  code: string;
-  title: string;
-  author: string;
-  methods: {
-    [method: string]: MethodDoc;
-  };
-}
-
-export interface MethodDoc {
-  author: string;
-  details: string;
-  notice: string;
-  params: {
-    [name: string]: string;
-  };
-  return: string;
 }
 
 export interface Opecode {
