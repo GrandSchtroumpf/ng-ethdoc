@@ -1,4 +1,7 @@
-
+main {
+  height: 100%;
+  overflow: hidden;
+}
 
 mat-toolbar {
   text-transform: uppercase;
@@ -8,3 +11,6 @@ mat-toolbar mat-icon {
   margin: 0 10px;
 }
 
+contract-details {
+  height: calc(100% - 64px);
+}

@@ -1,6 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import { ContractDoc } from "./../../models/contract";
-import { Component, Input, AfterViewInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { MethodDoc } from "../../models/contract";
 import { EthersService } from "../../services/ethers.service";
 
@@ -9,21 +9,20 @@ import { EthersService } from "../../services/ethers.service";
   templateUrl: "./method.component.html",
   styleUrls: ["./method.component.css"]
 })
-export class MethodComponent implements AfterViewInit {
+export class MethodComponent implements OnInit {
   @Input()
   method: MethodDoc;
   @Input()
   contract: ContractDoc;
 
-  public _file = new BehaviorSubject(null);
-  public file$ = this._file.asObservable();
+  public code: string;
   public result: any;
   public params: any[];
   public paramColumns = ['name', 'type', 'description', 'input'];
 
   constructor(private ethers: EthersService) {}
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.updateFile();
   }
 
@@ -32,11 +31,7 @@ export class MethodComponent implements AfterViewInit {
   }
 
   public updateFile() {
-    this._file.next({
-      uri: `${this.contract.name}-${this.method.name}.js`,
-      language: 'javascript',
-      content: this.getMethodContent()
-    });
+    this.code = this.getMethodContent();
   }
 
   public getMethodContent() {
@@ -76,15 +71,9 @@ export class MethodComponent implements AfterViewInit {
       }(${paramNames});`;
     }
 
-    return `const ethers = require("ethers");
-
+    return `// Inputs
 ${params}
-let provider = ethers.getDefaultProvider();
-const ${this.contract.name}Contract = new ethers.Contract(${
-      this.contract.name
-    }ContractAddress, abi, provider);
-
-${result}
-    `;
+// Outputs
+${result}`;
   }
 }

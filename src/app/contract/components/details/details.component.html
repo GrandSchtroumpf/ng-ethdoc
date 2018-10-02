@@ -11,18 +11,28 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <section>
 
       <mat-card>
         <mat-card-title>{{ contract.name }}.sol</mat-card-title>
         <mat-card-subtitle *ngIf="contract.title">{{ contract.title }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="contract.author">@{{ contract.author }}</mat-card-subtitle>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+            <pre>
+              <code highlight [code]="code"></code>
+            </pre>
+            <p>{{ contract.details }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button *ngIf="!compiled" mat-raised-button (click)="compile()">
+            Get ABI and bytecode
+          </button>
+        </mat-card-actions>
       </mat-card>
 
       <mat-card *ngFor="let method of contract.methods">
         <contract-method [contract]="contract" [method]="method"></contract-method>
       </mat-card>
 
-    </section>
   </mat-sidenav-content>
 </mat-sidenav-container>

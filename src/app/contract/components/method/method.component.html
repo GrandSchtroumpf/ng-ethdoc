@@ -22,8 +22,9 @@
   <mat-card-content>
     <p>{{ method.details }}</p>
 
-    <monaco-editor theme="vs-dark" [file]="file$ | async">
-    </monaco-editor>
+    <pre>
+      <code highlight [code]="code"></code>
+    </pre>
 
     <!-- Inputs -->
     <table mat-table [dataSource]="method.params">

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MaterialModule } from '@devdoc/shared';
 import { MonacoEditorModule } from 'ngx-monaco';
-
+import { HighlightModule } from 'ngx-highlightjs';
 
 import { ViewComponent } from './containers/view/view.component';
 import { ListComponent } from './containers/list/list.component';
@@ -20,7 +20,8 @@ import { DetailsComponent } from './components/details/details.component';
     MaterialModule,
     ContractRouterModule,
     FormsModule,
-    MonacoEditorModule.forRoot()
+    MonacoEditorModule.forRoot(),
+    HighlightModule.forRoot({ theme: 'vs2015' })
   ],
   declarations: [ViewComponent, ListComponent, EditComponent, MethodComponent, PreviewComponent, DetailsComponent]
 })

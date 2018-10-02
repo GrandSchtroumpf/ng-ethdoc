@@ -16,9 +16,10 @@ export class Compiler {
 
   /** Get all documentation data for one method */
   private getDocForMethod({ inputs, outputs }, devdoc) {
+    const params = devdoc.params || {};
     return {
       ...devdoc,
-      params:  inputs.map(({name, type}) => ({ name, type, description: devdoc.params[name] || '' })),
+      params:  inputs.map(({name, type}) => ({ name, type, description: params[name] || '' })),
       return: { outputs, description: devdoc.return || '' }
     };
   }

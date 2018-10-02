@@ -3,8 +3,18 @@
   height: 100%;
 }
 
+:host {
+  overflow: hidden;
+}
+
 mat-sidenav {
   width: 200px;
+}
+
+mat-sidenav-content {
+  overflow: auto;
+  height: 100%;
+  margin-bottom: 20px;
 }
 
 mat-toolbar-row {
@@ -13,4 +23,13 @@ mat-toolbar-row {
 
 mat-card {
   margin: 15px;
+}
+
+mat-card-content {
+  padding-top: 20px;
+}
+
+
+code {
+  padding: 15px;
 }

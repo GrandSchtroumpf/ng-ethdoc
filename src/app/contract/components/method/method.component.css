@@ -6,10 +6,8 @@ mat-card-content {
   padding-top: 25px;
 }
 
-monaco-editor {
-  width: 100%;
-  min-height: 200px;
-  display: block;
+code {
+  padding: 15px;
 }
 
 table {

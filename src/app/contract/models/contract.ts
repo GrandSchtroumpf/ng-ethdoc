@@ -45,6 +45,7 @@ export interface Compiled {
   sources: {
     [name: string]: SolidityAST
   };
+  errors: string[];
 }
 
 export interface Contract {

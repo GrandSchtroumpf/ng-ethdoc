@@ -43,6 +43,9 @@ export class EditComponent implements OnInit {
 
   private async compile(code: string) {
     const compiled = await this.compiler.compileOne(code);
+    if (Object.keys(compiled.contracts).length === 0) {
+      throw new Error('Got compilation errors : ' + compiled.errors);
+    }
     const contractName = Object.keys(compiled.contracts)[0];
     return this.compiler.getDoc(compiled.contracts[contractName]);
   }
