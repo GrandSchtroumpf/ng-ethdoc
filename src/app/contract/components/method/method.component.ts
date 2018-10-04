@@ -57,6 +57,7 @@ export class MethodComponent implements OnInit {
       .join("\n");
 
     let result: string;
+    // If call method
     if (this.method.constant) {
       const call = `const result = await ${this.contract.name}Contract.${
         this.method.name
@@ -65,6 +66,7 @@ export class MethodComponent implements OnInit {
         ? `// ${this.method.return.description}`
         : "";
       result = call + description;
+    // If send method
     } else {
       result = `await ${this.contract.name}Contract.${
         this.method.name

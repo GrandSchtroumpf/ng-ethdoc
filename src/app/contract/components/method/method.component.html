@@ -27,7 +27,7 @@
     </pre>
 
     <!-- Inputs -->
-    <table mat-table [dataSource]="method.params">
+    <table *ngIf="method.params.length > 0" mat-table [dataSource]="method.params">
       <tr mat-header-row *matHeaderRowDef="paramColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: paramColumns;"></tr>
       <!-- Name Column -->

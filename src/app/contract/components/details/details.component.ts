@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import {MediaMatcher} from '@angular/cdk/layout';
 import { ContractDoc } from './../../models/contract';
 import { Compiler } from '../../services/compiler.service';
 
@@ -7,7 +8,7 @@ import { Compiler } from '../../services/compiler.service';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css']
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
 
   @Input()
   public contract: ContractDoc;
@@ -15,13 +16,27 @@ export class DetailsComponent implements OnInit {
   public network: string;
 
   private showAbi: boolean;
+  private _mobileQueryListener: () => void;
+  public mobileQuery: MediaQueryList;
   public compiled: any;
   public code: string;
 
-  constructor(public compiler: Compiler) { }
+  constructor(
+    private compiler: Compiler,
+    media: MediaMatcher,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.mobileQuery = media.matchMedia('(max-width: 900px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
   ngOnInit() {
     this.updateCode();
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   private updateCode() {
@@ -44,9 +59,8 @@ const ${this.contract.name}Contract = new ethers.Contract(contractAddress, abi, 
   }
 
   public compile() {
-    const compiled = this.compiler.compileOne(this.contract.code);
-    const contractName = Object.keys(compiled.contracts)[0];
-    this.compiled = compiled.contracts[contractName];
+    this.compiled = this.compiler.getContractFromCode(this.contract.code);
+    console.log({ compiled: this.compiled });
     this.showAbi = true;
     this.updateCode();
   }

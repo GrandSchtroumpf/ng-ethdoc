@@ -1,3 +1,4 @@
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase';
@@ -7,10 +8,19 @@ import { auth } from 'firebase';
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(
+    private afAuth: AngularFireAuth,
+    private db: AngularFirestore
+  ) { }
+
+  public isLoggedIn(): Promise<boolean> {
+    return this.afAuth.user.toPromise()
+      .then(user => !!user.uid);
+  }
 
   public login() {
-    this.afAuth.auth.signInWithPopup(new auth.GithubAuthProvider());
+    return this.afAuth.auth.signInWithPopup(new auth.GithubAuthProvider())
+      .catch(err => console.log('Could not sign in', err));
   }
 
   public logout() {

@@ -24,10 +24,34 @@ export class Compiler {
     };
   }
 
+  /** Return a well formated documentation from a code */
+  public getDocFromCode(code: string): Partial<ContractDoc> {
+    const compiled = this.compileOne(code);
+    const names = this.getContractsName(compiled);
+    const contract = this.getContractFromCode(code);
+    const doc = this.getDoc(contract);
+    return { ...doc, name: names[0], code };
+  }
+
+  /** Return the contract details from a code */
+  public getContractFromCode(code: string) {
+    const compiled = this.compileOne(code);
+    const names = this.getContractsName(compiled);
+    return compiled.contracts[`:${names[0]}`];
+  }
+
+  /** Return the name of each contract depending on the name of the contract in the code */
+  public getContractsName(compiled: Compiled): string[] {
+    return Object.keys(compiled.contracts).map(name => {
+      const names = name.split(':');
+      return names[names.length - 1];
+    });
+  }
+
+  /** Compile One Contract */
   public compileOne(code: string): Compiled {
     return this.solc.compile(code, 1);
   }
-
 
   /**
    * Get the Documentation of a contract

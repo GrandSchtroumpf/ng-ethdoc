@@ -1,0 +1,18 @@
+<main *ngIf="contract$ | async as contract; else compiling">
+  <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <mat-icon class="menu" >menu</mat-icon>
+      <h3>Preview</h3>
+    </div>
+    <button mat-button (click)="save(contract)">Save</button>
+  </mat-toolbar>
+  <contract-details [contract]="contract"></contract-details>
+</main>
+
+
+<ng-template #compiling>
+  <p>
+    Your contract is beeing compiled.<br />
+    Please wait a little longer
+  </p>
+</ng-template>

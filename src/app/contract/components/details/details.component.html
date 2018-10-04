@@ -1,5 +1,5 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidebar opened="true" mode="side">
+  <mat-sidenav #sidebar [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'">
     <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center">
       <span>{{ network }}</span>
     </mat-toolbar-row>

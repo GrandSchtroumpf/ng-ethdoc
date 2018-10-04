@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Remix } from '../../services/remix.service';
 
@@ -8,7 +9,10 @@ import { Remix } from '../../services/remix.service';
 })
 export class RootComponent implements OnInit {
 
-  constructor(private remix: Remix) { }
+  constructor(
+    private remix: Remix,
+    private router: Router
+  ) { }
 
   @HostListener('window:message', ['$event'])
   onMessage(e: MessageEvent) {
@@ -16,7 +20,9 @@ export class RootComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    if (this.remix.parentIsRemix) {
+      this.router.navigate(['contract/preview']);
+    }
   }
 
 }
